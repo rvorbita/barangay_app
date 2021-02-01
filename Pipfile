@@ -7,6 +7,9 @@ verify_ssl = true
 
 [packages]
 flask = "*"
+flask-wtf = "*"
+flask-migrate = "*"
+flask-sqlalchemy = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"

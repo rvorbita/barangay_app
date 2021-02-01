@@ -1,13 +1,28 @@
 {% include "base.html" %}
 
 {% block content %}
-<div class="container text-center">   
-    <h1>BARANGAY INFORMATION APP</h1>
+<div class="container" style="padding-top: 60px;">   
+
+    <h1 style="padding-bottom: 60px; text-align: center">BARANGAY INFORMATION APP</h1>
 
 
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+          <strong>{{ message }}</strong> 
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
 
-    <table class="table">
+    <table class="table" style="text-align: center;">
      
         <thead class="thead-dark">
           <tr>
@@ -16,6 +31,7 @@
             <th scope="col">LastName</th>
             <th scope="col">MiddleName</th>
             <th scope="col">Alias</th>
+            <th scope="col">Custom</th>
           </tr>
         </thead>
         <tbody>     
@@ -26,9 +42,156 @@
             <td>{{ user.lastname }}</td>
             <td>{{ user.middlename }}</td>
             <td>{{ user.alias }}</td>
+            <td>
+              <a class="btn btn-primary" href="/update/{{ user.id }}" data-toggle="modal" data-target="#editmodal{{ user.id }}">Edit</a>
+              <a class="btn btn-primary" href="/delete/{{ user.id }}" data-toggle="modal" data-target="#deletemodal{{ user.id }}">Delete</a>
+            </td>
+
           </tr>
-        {% endfor %}
+        
+        
+          <!-- MODAL POPUP -->
+          <!-- ADD MODAL -->
+
+          <div class="modal fade" id="mymodal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                    <h2 class="modal-title">Register</h2>
+                    <button class="close" type="button" data-dismiss="modal">x</button>         
+                  </div>
+                  <div class="modal-body">
+
+                      <form action="/register" method="post">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                          {{ form.firstname.label }}
+                          {{ form.firstname(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.lastname.label }}
+                          {{ form.lastname(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.middlename.label }}
+                          {{ form.middlename(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.email.label }}
+                          {{ form.email(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.mobile.label }}
+                          {{ form.mobile(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.alias.label }}
+                          {{ form.alias(class="form-control") }}
+                        </div>
+                        <div class="form-group">
+                          {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                      </form>
+
+                  </div>
+              </div> <!-- end modal-content -->
+            </div> <!-- end modal-dialog -->
+          </div> <!-- end .modal -->
+        
+
+
+          <!-- EDIT MODAL -->
+
+          <div class="modal fade" id="editmodal{{ user.id }}">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                    <h2 class="modal-title">EDIT: {{ user.firstname }}</h2>
+                    <button class="close" type="button" data-dismiss="modal">x</button>         
+                  </div>
+                  <div class="modal-body">
+                    <form action="/update/{{ user.id }}" method="post">
+                        {{ form.hidden_tag() }}
+                      <div class="formn-group">
+                        {{ form.firstname.label }} 
+                        <input class="form-control" type="text" name="firstname" value="{{ user.firstname }}">
+                      </div>
+
+                      <div class="formn-group">
+                        {{ form.lastname.label }}
+                        <input class="form-control" type="text" name="lastname" value="{{ user.lastname }}">
+                      </div>
+
+                      <div class="formn-group">
+                        {{ form.middlename.label }}
+                        <input class="form-control" type="text" name="middlename" value="{{ user.middlename }}">
+                      </div>
+
+                      <div class="formn-group">
+                        {{ form.email.label }} 
+                        <input class="form-control" type="text" name="email" value="{{ user.email }}">
+                      </div>
+
+                      <div class="formn-group">
+                        {{ form.mobile.label }}
+                        <input class="form-control" type="text" name="mobile" value="{{ user.mobile }}">
+                      </div>
+
+                      <div class="formn-group">
+                        {{ form.alias.label }}
+                        <input class="form-control" type="text" name="alias" value="{{ user.alias }}">
+                      </div>
+
+                      <br>
+                      <div class="formn-group">
+                        {{ form.submit(class="btn btn-primary")}}
+                      </div>
+
+                    </form>
+
+              
+                  </form>
+
+                  </div>
+              </div> <!-- end modal-content -->
+            </div> <!-- end modal-dialog -->
+          </div> <!-- end .modal -->
+
+
+
+
+          <!-- DELETE MODAL -->
+
+          <div class="modal fade" id="deletemodal{{ user.id }}">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-header">
+                    <h2 class="modal-title">DELETE: {{ user.firstname }}</h2>
+                    <button class="close" type="button" data-dismiss="modal">x</button>         
+                  </div>
+                  <div class="modal-body">
+                    <form action="/delete/{{ user.id }}" method="post">
+                        {{ form.hidden_tag() }}
+                        <p>Are you sure you want to delete this data? </p>
+                      <br>
+                      <div class="formn-group">
+                        {{ form.submit(class="btn btn-primary")}}
+                      </div>
+                    </form>
+                  </form>
+
+                  </div>
+              </div> <!-- end modal-content -->
+            </div> <!-- end modal-dialog -->
+          </div> <!-- end .modal -->
+      
+
+          <!-- END MODAL -->
+
+          {% endfor %}
     </table>
+
+    <a class="btn btn-primary" href="" data-toggle="modal" data-target="#mymodal">Add New</a>
       
 
 </div>
